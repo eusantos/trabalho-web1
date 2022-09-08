@@ -1,93 +1,52 @@
--para subir o servidor 
--mude as credenciais do banco no arquivo db_credentials.php
--coloque o projeto na pasta do servidor
--acesse o projeto localmente pelo navegador e rode o conteudo de web1/db/setup/setup.php
-
 <p align="center">
-  <img src="https://github.com/segdev-tecnologia/vagas/blob/main/backend/banner_segdev_4.jpg">
+  <img src="https://github.com/eusantos/trabalho-web1/blob/master/web1/img/about_us.png">
 </p>
 
-# Segdev - Backend Desafio 2
-Uma seguradora oferece aos seus clientes pacotes personalizados para suas necessidades especificas sem que eles precisem entendem nada sobre seguros.
+# Trabalho de WEB 1 - UFPR - 2022
+Trabalho desenvolvido para a disciplina de Desenvolvimento Web 1, do professor Alex, da universidade Federal do Paraná.
 
-A seguradora determina as necessidades do cliente atravez de um formulario com informações pessoais e de risco, alem de informações sobre seus veiculos e imoveis. Usando esses dados, é determinado o perfil de risco deles para cada linha de seguros existente, sugerindo um plano de seguro (`"economico"`, `"padrao"`, `"avancado"`) correspondente pro perfil de risco encontrado.
+O tema deste trabalho era livre, então decidi criar um blog, proximo da sugestão dada pelo proprio professor, mas focando no tema especifico da divulgação cientifica.
 
-Para esse desafio, você irá criar uma versão simplificada dessa aplicação, escrevendo o recurso de uma API que recebe um payload JSON com as informações do cliente e devolve os planos sugeridos para cada linha de seguros, tambem em JSON.
+Escolhi seguir como referencia o site [Inovação Tecnologica](https://www.inovacaotecnologica.com.br/), o qual visito diariamente.
 
-## Entradas
-Primeiro o frontend da aplicação pede ao usuário suas **informações pessoais** e deixa que ele adicione seu **veiculo** e **casa**. No final, é pedido que ele responda tres perguntas binarias sobre **risco**. O resultado é o payload a seguir que é enviado para o recurso da aplicação.
+## O trabalho
+Esse trabalho foi desenvolvido em `PHP`, com `HTML5`, `CSS3` e `JS`.
+O banco de dados utilizando foi o `MySql`.
 
-```JSON
-{
-  "age": 35,
-  "dependents": 2,
-  "house": {"ownership_status": "owned"},
-  "income": 0,
-  "marital_status": "married",
-  "risk_questions": [0, 1, 0],
-  "vehicle": {"year": 2018}
-}
-```
+### O sistema consiste num blog com as seguintes paginas e funcionalidades:
 
-### Atributos de usuário
-Todos os atributos são obrigatórios:
+- Header
+  - Exibido em todas as paginas da aplicação, exceto login
+  - Exibe um menu com link para home, lista de artigos e "logar/cadastrar/deslogar"
+- Footer
+  - Exibe informações basicas, e tambem um barra lateral com o "Sobre nós" e link para categorias dos artigos
+- Login/cadastro
+  - Exibe formularios de login e novo cadastro
+  - Quando um novo cadastro é criado, apenas o formulario de login é exibido
+  - O logout é realizado pelo menu no header das paginas
+- Pagina inicial
+  - Uma pagina com os ultimos 5 artigos publicados, exibindo titulo, resumo e tumbnail do artigo
+  - Para adminstradores, tambem é exibido um botão para novas publicações e um botão para editar cada postagem
+- Novo artigo
+  - Pagina acessivel apenas por administradores
+  - Formulario para preenchimento e publicação de um artigo
+  - Se fornecido o id de um artigo existente no get da pagina, abre em modo de edição do artigo
+  - Quando um artigo é criado, sua categoria é criada tambem, se ja não existir
+- Artigos
+  - Assim como na pagina inicial, exibe o resumor de artigos, mas exibe todos e não apenas os 5 ultimos
+  - Se fornecido o id de uma categoria via get, filtra os artigos pela categoria fornecida
+  - Tambem exibe os botões de novo artigo e edição de artigos
+- Artigo
+  - Exibe o artigo completo, podendo renderizar tags HTML para um texto mais rico
+  - Para administrador exibe o botão de edição do artigo
+  - Para usuarios logados, exibe um formulario para inserir comentarios, e uma lista dos comentarios realizados
+  - Para administradores, exibe um botão em cada  comentario, para sua exclusão. Uma confirmação é exigida.
 
-- Age (Idade: Um inteiro maior ou igual a zero).
-- Dependents (Numero de dependentes: Um inteiro maior ou igual a zero).
-- Income (Renda anual: Um inteiro maior ou igual a zero).
-- Status civil (`"single"` or `"married"`).
-- Questões de risco (Um array com 3 booleanos).
+## Como executar
 
-##### House
-Os usuários podem ter 0 ou 1 casa. Quando tem isso é um atributo: `ownership_status`, que pode ser `"owned"` (proprio) ou `"rented"`(alugado).
+Para rodar essa aplicação é necessario que o projeto esteja na pasta do servidor Apache, e o MySql esteja rodando.
 
-##### Vehicle
-Os usuários podem ter 0 ou 1 veiculo. Quando tem isso é um atributo: `year`, que contem o um inteiro com o ano de fabricação do veiculo.
+- O arquivo db/db_credential.php devce ser editado para as credenciais corretas do banco de dados.
+- Acessar o servidor, na url `{base_url_do_projeto}/db/setup/db_setup.php`. Esse criara(ou recriará) o banco de dados com as tabelas e informações necessarias para rodar a aplicação.
+- Um usuario adminstrador, com login: admin@admin.com e senha: admin for criado
 
-
-## O algoritimo
-A aplicação recebe o payload pelo recurso da API e transforma isso num perfil de risco atravez do calculo do risk score para cada linha de seguro **(life, disability, home & auto)**, baseado nas informações fornecidas pelo usuario.
-
-Primeiro é calculado o **base score** somando as respostas do formulario de risco, resultrando em um numero de 0 a 3. Depois são aplicadas as seguintes regras para determinar o **risk score** para cada tipo se seguro
-
-- Se o usuário não tem renda, veiculo ou casa, ele é inelegivel para invalidez, seguros auto e residencial, respectivamente.
-- Se o usuário tem mais de 60 anos, ele é inelegivel para invalidez e seguro de vida.
-- Se o usuário tem menos de 30 anos, diminua 2 pontos de risco de todas as linhas de seguro. Se ele tiver entre 30 e 40, diminua 1.
-- Se a renda for superior a 200k, diminua 1 ponto de risco de todas as linhas de seguro.
-- Se a casa do usuário é alugada, adicione 1 ponto de risco no seguro residencial e de invalidez
-- Se o usuário tem dependentes, adicione 1 ponto em ambos os riscos de invalidez e vida.
-- Se o usuario for casado, adicione 1 ponto em vida, e remova 1 ponto em invalidez.
-- Se o veiculo dele tiver sido produzido nos ultimos 5 anos, adicione 1 ponto no veiculo.
-
-O algoritimo resulta num score final para cada linha se seguros, que deve ser processada usando os seguintes ranges:
-
-```mermaid
-graph LR;
-    A(0 ou abaixo)-.->B(economico);
-    C(1 ou 2)-.->D(padrao);
-    E(3 ou acima)-.->F(avancado);
-
-```
-
-## A saída
-Considerando os dados acima, a aplicação deverá retornar o seguinte JSON payload:
-
-```JSON
-{
-    "auto": "padrao",
-    "disability": "inelegivel",
-    "home": "economico",
-    "life": "padrao"
-}
-```
-
-## Critérios
-Você pode usar qualquer tecnologia para implementar esse desafio, mas usar a tecnologia para a qual a sua vaga é direcionada sempre será um diferencial.
-No desafio será avaliada a interpretação do problema, a solução desenvolvida, a legibilidade do código e o zelo com a entrega/descrição da solução.
-
-#### Critérios básicos de aceitação
-
--  Versionar no github
--  80+% de cobertura de testes unitários
--  API Rest
--  Uso de qualquer banco de dados relacional
