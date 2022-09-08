@@ -1,0 +1,17 @@
+- é preciso estar na pasta acima do projeto.
+sudo rm -rf ~/../../var/www/html/web1/web1/ ; sudo mkdir ~/../../var/www/html/web1/web1 ; sudo cp -a web1/  ~/../../var/www/html/web1
+
+- Ver erros do apache
+cat /var/log/apache2/error.log
+
+- cria css pra itens de form: 
+https://enjoycss.com/code/#box
+
+- cria css botoes: 
+https://www.bestcssbuttongenerator.com/
+
+- cria a grid pra manter o layout
+https://grid.layoutit.com/
+
+- Cria logo
+smashinglogo.com
