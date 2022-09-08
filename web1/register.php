@@ -100,13 +100,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php exit(); ?>
   <?php endif; ?>
 
-  <?php if ($error): ?>
-    <h3 style="color:red;"><?php echo $error_msg; ?></h3>
-  <?php endif; ?>
-
   <div class="login">
     <div class="card">
       <h1>Realize o login</h1>
+      <?php if ($error): ?>
+        <h3 style="color:red;"><?php echo $error_msg; ?></h3>
+      <?php endif; ?>
       <form action="register.php" method="post">
         <input type="text" name="lemail" placeholder="Email" class="register_input" value="" required><br>
         <br>
